@@ -1,0 +1,40 @@
+NAME: ttm2k
+
+VERSION: "0.1.0"
+
+DESCRIPTION: >
+  Talk To Me 2000 -- encrypted terminal messenger with Y2K pixel art
+  aesthetics. A curses-based instant messenger inspired by MSN Messenger,
+  featuring end-to-end encryption via Diffie-Hellman key exchange,
+  buddy lists, nudges, typing indicators, and a retro Y2K visual style.
+
+USAGE:
+  - "ttm2k"
+  - "ttm2k -s HOST -p PORT"
+  - "ttm2k server"
+  - "ttm2k server -p PORT"
+
+OPTIONS:
+  CLIENT:
+    -h, --help:        "Show help message"
+    -v, --version:     "Show version information"
+    -s, --server HOST: "Server address (default: 127.0.0.1)"
+    -p, --port PORT:   "Server port (default: 2000)"
+
+  SERVER:
+    --bind ADDR:       "Bind address (default: 0.0.0.0)"
+    -p, --port PORT:   "Listen port (default: 2000)"
+    --data-dir DIR:    "Data directory (default: ~/.ttm2k/server)"
+
+EXAMPLES:
+  - "ttm2k"
+  - "ttm2k -s 10.0.0.5 -p 3000"
+  - "ttm2k server"
+  - "ttm2k server -p 8080 --data-dir /tmp/ttm2k"
+
+SECURITY:
+  - "Diffie-Hellman key exchange (RFC 3526 Group 14, 2048-bit)"
+  - "HMAC-SHA256 based symmetric stream cipher"
+  - "Encrypt-then-MAC construction"
+  - "PBKDF2-HMAC-SHA256 password hashing (100k iterations)"
+  - "Server sees only ciphertext -- zero knowledge of message content"

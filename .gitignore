@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.dist/
+*.build/
+*.onefile-build/
+bazel-*
+MODULE.bazel.lock
+.DS_Store

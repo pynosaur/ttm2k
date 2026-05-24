@@ -1,0 +1,73 @@
+name: Test ttm2k
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Run blue
+      run: |
+        git clone --depth 1 https://github.com/pynosaur/blue.git /tmp/blue
+        cd /tmp/blue && python app/main.py $GITHUB_WORKSPACE
+
+  test:
+    needs: lint
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ['3.8', '3.11', '3.12']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Test basic commands
+      run: |
+        python app/main.py --version
+        python app/main.py --help
+
+    - name: Run unit tests
+      run: |
+        python -m unittest discover -s test -v
+
+  build:
+    runs-on: macos-latest
+    needs: test
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Bazel
+      uses: bazel-contrib/setup-bazel@0.8.1
+      with:
+        bazelisk-cache: true
+
+    - name: Build with Bazel
+      run: |
+        bazel build //:ttm2k_bin
+      continue-on-error: true
+
+    - name: Test built binary
+      if: success()
+      run: |
+        if [ -f ./bazel-bin/ttm2k ]; then
+          ./bazel-bin/ttm2k --version
+          ./bazel-bin/ttm2k --help
+          echo "Built binary works"
+        else
+          echo "Binary not built, skipping test"
+        fi
