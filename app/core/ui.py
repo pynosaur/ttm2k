@@ -207,21 +207,55 @@ class ChatUI:
             curses.color_pair(C_TITLE) | curses.A_BOLD,
         )
 
-        user_attr = curses.color_pair(C_HIGHLIGHT) if self.login_field == 0 else curses.color_pair(C_TEXT)
-        self._safe_addstr(form_y + 3, form_x + 2, "Username:", curses.color_pair(C_TEXT))
+        user_attr = (
+            curses.color_pair(C_HIGHLIGHT)
+            if self.login_field == 0
+            else curses.color_pair(C_TEXT)
+        )
+        self._safe_addstr(
+            form_y + 3,
+            form_x + 2,
+            'Username:',
+            curses.color_pair(C_TEXT),
+        )
         user_display = self.login_user + ("_" if self.login_field == 0 else "")
         self._safe_addstr(form_y + 4, form_x + 2, f"[{user_display:<30}]", user_attr)
 
-        pass_attr = curses.color_pair(C_HIGHLIGHT) if self.login_field == 1 else curses.color_pair(C_TEXT)
-        self._safe_addstr(form_y + 5, form_x + 2, "Password:", curses.color_pair(C_TEXT))
-        pass_display = "*" * len(self.login_pass) + ("_" if self.login_field == 1 else "")
+        pass_attr = (
+            curses.color_pair(C_HIGHLIGHT)
+            if self.login_field == 1
+            else curses.color_pair(C_TEXT)
+        )
+        self._safe_addstr(
+            form_y + 5,
+            form_x + 2,
+            'Password:',
+            curses.color_pair(C_TEXT),
+        )
+        pass_display = "*" * len(self.login_pass) + (
+            "_" if self.login_field == 1 else ""
+        )
         self._safe_addstr(form_y + 6, form_x + 2, f"[{pass_display:<30}]", pass_attr)
 
-        btn_attr = curses.color_pair(C_HIGHLIGHT) | curses.A_BOLD if self.login_field == 2 else curses.color_pair(C_TEXT)
+        btn_attr = (
+            curses.color_pair(C_HIGHLIGHT) | curses.A_BOLD
+            if self.login_field == 2
+            else curses.color_pair(C_TEXT)
+        )
         btn_text = "[ Sign In ]" if self.login_mode == "login" else "[ Register ]"
         toggle_text = "Tab: Register" if self.login_mode == "login" else "Tab: Sign In"
-        self._safe_addstr(form_y + 8, form_x + 2, art.center_text(btn_text, 20), btn_attr)
-        self._safe_addstr(form_y + 8, form_x + 22, toggle_text, curses.color_pair(C_SYSTEM))
+        self._safe_addstr(
+            form_y + 8,
+            form_x + 2,
+            art.center_text(btn_text, 20),
+            btn_attr,
+        )
+        self._safe_addstr(
+            form_y + 8,
+            form_x + 22,
+            toggle_text,
+            curses.color_pair(C_SYSTEM),
+        )
 
         if self.login_error:
             err_y = form_y + 11
@@ -244,7 +278,12 @@ class ChatUI:
 
         footer = "Ctrl+C: Quit"
         if h > 2:
-            self._safe_addstr(h - 1, max(0, (w - len(footer)) // 2), footer, curses.color_pair(C_OFFLINE))
+            self._safe_addstr(
+                h - 1,
+                max(0, (w - len(footer)) // 2),
+                footer,
+                curses.color_pair(C_OFFLINE),
+            )
 
     # ── Main Screen ──
 
@@ -285,17 +324,36 @@ class ChatUI:
         panel_title = " Contacts "
         is_focused = self.focus == "buddies"
 
-        border_color = curses.color_pair(C_HIGHLIGHT) if is_focused else curses.color_pair(C_BORDER)
-        self._safe_addstr(y, x, art.CORNER_TL + art.BORDER_H * max(0, w - 2) + art.CORNER_TR, border_color)
+        border_color = (
+            curses.color_pair(C_HIGHLIGHT)
+            if is_focused
+            else curses.color_pair(C_BORDER)
+        )
+        self._safe_addstr(
+            y,
+            x,
+            art.CORNER_TL + art.BORDER_H * max(0, w - 2) + art.CORNER_TR,
+            border_color,
+        )
 
         title_x = x + max(1, (w - len(panel_title)) // 2)
-        self._safe_addstr(y, title_x, panel_title, curses.color_pair(C_TITLE) | curses.A_BOLD)
+        self._safe_addstr(
+            y,
+            title_x,
+            panel_title,
+            curses.color_pair(C_TITLE) | curses.A_BOLD,
+        )
 
         for row in range(1, h - 1):
             self._safe_addstr(y + row, x, art.BORDER_V, border_color)
             self._safe_addstr(y + row, x + w - 1, art.BORDER_V, border_color)
 
-        self._safe_addstr(y + h - 1, x, art.CORNER_BL + art.BORDER_H * max(0, w - 2) + art.CORNER_BR, border_color)
+        self._safe_addstr(
+            y + h - 1,
+            x,
+            art.CORNER_BL + art.BORDER_H * max(0, w - 2) + art.CORNER_BR,
+            border_color,
+        )
 
         inner_w = w - 4
         with self._lock:
@@ -329,10 +387,20 @@ class ChatUI:
             is_selected = idx == self.buddy_selected
             if is_selected and is_focused:
                 line = f" {icon} {name}"[:inner_w + 2]
-                self._safe_addstr(row, x + 1, line.ljust(w - 2), curses.color_pair(C_SELECTED))
+                self._safe_addstr(
+                    row,
+                    x + 1,
+                    line.ljust(w - 2),
+                    curses.color_pair(C_SELECTED),
+                )
             else:
                 self._safe_addstr(row, x + 2, icon, curses.color_pair(status_color))
-                self._safe_addstr(row, x + 4, name[:inner_w - 2], curses.color_pair(C_TEXT))
+                self._safe_addstr(
+                    row,
+                    x + 4,
+                    name[:inner_w - 2],
+                    curses.color_pair(C_TEXT),
+                )
 
             if self.chat_target == name:
                 self._safe_addstr(row, x + w - 3, ">", curses.color_pair(C_HIGHLIGHT))
@@ -341,7 +409,11 @@ class ChatUI:
 
     def _draw_chat_panel(self, y: int, x: int, h: int, w: int):
         is_focused = self.focus == "chat"
-        border_color = curses.color_pair(C_HIGHLIGHT) if is_focused else curses.color_pair(C_BORDER)
+        border_color = (
+            curses.color_pair(C_HIGHLIGHT)
+            if is_focused
+            else curses.color_pair(C_BORDER)
+        )
 
         if self.chat_target:
             session = self.client.sessions.get(self.chat_target)
@@ -351,15 +423,30 @@ class ChatUI:
         else:
             panel_title = " Chat "
 
-        self._safe_addstr(y, x, art.CORNER_TL + art.BORDER_H * max(0, w - 2) + art.CORNER_TR, border_color)
+        self._safe_addstr(
+            y,
+            x,
+            art.CORNER_TL + art.BORDER_H * max(0, w - 2) + art.CORNER_TR,
+            border_color,
+        )
         title_x = x + max(1, (w - len(panel_title)) // 2)
-        self._safe_addstr(y, title_x, panel_title, curses.color_pair(C_TITLE) | curses.A_BOLD)
+        self._safe_addstr(
+            y,
+            title_x,
+            panel_title,
+            curses.color_pair(C_TITLE) | curses.A_BOLD,
+        )
 
         for row in range(1, h - 1):
             self._safe_addstr(y + row, x, art.BORDER_V, border_color)
             self._safe_addstr(y + row, x + w - 1, art.BORDER_V, border_color)
 
-        self._safe_addstr(y + h - 1, x, art.CORNER_BL + art.BORDER_H * max(0, w - 2) + art.CORNER_BR, border_color)
+        self._safe_addstr(
+            y + h - 1,
+            x,
+            art.CORNER_BL + art.BORDER_H * max(0, w - 2) + art.CORNER_BR,
+            border_color,
+        )
 
         input_y = y + h - 3
         self._safe_addstr(
@@ -474,7 +561,10 @@ class ChatUI:
         elif key == curses.KEY_DOWN:
             self.login_field = min(2, self.login_field + 1)
         elif key in (curses.KEY_ENTER, 10, 13):
-            if self.login_field == 2 or (self.login_field < 2 and self.login_user and self.login_pass):
+            if (
+                self.login_field == 2 or
+                (self.login_field < 2 and self.login_user and self.login_pass)
+            ):
                 self._do_login()
             else:
                 self.login_field = min(2, self.login_field + 1)
@@ -525,8 +615,14 @@ class ChatUI:
         elif key in (curses.KEY_ENTER, 10, 13, curses.KEY_RIGHT):
             if buddy_count > 0:
                 with self._lock:
-                    online = [b for b in self.buddy_list if b.get("status") != protocol.STATUS_OFFLINE]
-                    offline = [b for b in self.buddy_list if b.get("status") == protocol.STATUS_OFFLINE]
+                    online = [
+                        b for b in self.buddy_list
+                        if b.get("status") != protocol.STATUS_OFFLINE
+                    ]
+                    offline = [
+                        b for b in self.buddy_list
+                        if b.get("status") == protocol.STATUS_OFFLINE
+                    ]
                     sorted_b = online + offline
                 if 0 <= self.buddy_selected < len(sorted_b):
                     target = sorted_b[self.buddy_selected]["user"]

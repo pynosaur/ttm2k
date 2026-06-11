@@ -125,7 +125,13 @@ def box(width: int, height: int, title: str = "") -> list:
         pad = width - 2 - len(title_str)
         left_pad = pad // 2
         right_pad = pad - left_pad
-        top = CORNER_TL + BORDER_H * left_pad + title_str + BORDER_H * right_pad + CORNER_TR
+        top = (
+            CORNER_TL +
+            BORDER_H * left_pad +
+            title_str +
+            BORDER_H * right_pad +
+            CORNER_TR
+        )
     else:
         top = CORNER_TL + BORDER_H * (width - 2) + CORNER_TR
     lines.append(top)

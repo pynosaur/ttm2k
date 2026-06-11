@@ -207,7 +207,8 @@ class TestIntegration(unittest.TestCase):
             cwd=str(Path(__file__).resolve().parent.parent),
         )
         self.assertEqual(result.returncode, 0)
-        self.assertIn("0.1.0", result.stdout)
+        from app import __version__
+        self.assertIn(__version__, result.stdout)
 
 
 if __name__ == "__main__":

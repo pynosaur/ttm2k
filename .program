@@ -1,5 +1,5 @@
 name: ttm2k
-version: 0.1.0
+version: 0.1.1
 author: @spacemany2k38
 description: Talk To Me 2000 -- encrypted terminal messenger with Y2K pixel art aesthetics
 type: cli-tool

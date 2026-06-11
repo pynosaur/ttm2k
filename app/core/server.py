@@ -131,8 +131,10 @@ class ClientConnection:
 class Server:
     """ttm2k relay server."""
 
-    def __init__(self, host: str = "0.0.0.0", port: int = DEFAULT_PORT,
-                 data_dir: str = "~/.ttm2k/server"):
+    def __init__(
+        self, host: str = "0.0.0.0", port: int = DEFAULT_PORT,
+        data_dir: str = "~/.ttm2k/server",
+    ):
         self.host = host
         self.port = port
         self.data_dir = Path(os.path.expanduser(data_dir))
